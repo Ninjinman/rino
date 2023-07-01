@@ -1,0 +1,59 @@
+<!-- slot_game.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #reel-1, #reel-2, #reel-3 {
+            height: 300px;
+            width: 100px;
+            overflow: hidden;
+        }
+        .reel {
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="reel-1" class="reel-container">
+        <div id="reel-1-content" class="reel"></div>
+    </div>
+    <div id="reel-2" class="reel-container">
+        <div id="reel-2-content" class="reel"></div>
+    </div>
+    <div id="reel-3" class="reel-container">
+        <div id="reel-3-content" class="reel"></div>
+    </div>
+    <script>
+        const reel1 = document.querySelector('#reel-1-content');
+        const reel2 = document.querySelector('#reel-2-content');
+        const reel3 = document.querySelector('#reel-3-content');
+        
+        // 20個の画像を仮定
+        for (let i = 0; i < 10; i++) {
+            reel1.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
+            reel2.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
+            reel3.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
+        }
+        
+        let interval1, interval2, interval3;
+        $(document).keypress(function(e) {
+            if (e.which == 32) { // スペースキー
+                interval1 = setInterval(() => { reel1.scrollTop += 100; }, 100);
+                interval2 = setInterval(() => { reel2.scrollTop += 100; }, 100);
+                interval3 = setInterval(() => { reel3.scrollTop += 100; }, 100);
+            }
+            if (e.which == 49) { // 1
+                clearInterval(interval1);
+            }
+            if (e.which == 50) { // 2
+                clearInterval(interval2);
+            }
+            if (e.which == 51) { // 3
+                clearInterval(interval3);
+            }
+        });
+    </script>
+</body>
+</html>
