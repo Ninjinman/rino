@@ -4,59 +4,83 @@
 <html>
 <head>
     <style>
+        #slot-machine {
+            display: flex;
+            justify-content: center;
+        }
         #reel-1, #reel-2, #reel-3 {
             height: 300px;
             width: 100px;
             overflow: hidden;
+            position: relative;
+            margin: 0 10px;
         }
         .reel {
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
+            position: relative;
+            animation: spin 1s steps(10, end) infinite;
+        }
+        .reel img {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+        }
+        @keyframes spin {
+            0% { top: 0px; }
+            100% { top: -1000px; } /* reelHeight * reelLength */
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
-    <div id="reel-1" class="reel-container">
-        <div id="reel-1-content" class="reel"></div>
+    <div id="slot-machine">
+        <div id="reel-1" class="reel-container">
+            <div id="reel-1-content" class="reel"></div>
+        </div>
+        <div id="reel-2" class="reel-container">
+            <div id="reel-2-content" class="reel"></div>
+        </div>
+        <div id="reel-3" class="reel-container">
+            <div id="reel-3-content" class="reel"></div>
+        </div>
     </div>
-    <div id="reel-2" class="reel-container">
-        <div id="reel-2-content" class="reel"></div>
-    </div>
-    <div id="reel-3" class="reel-container">
-        <div id="reel-3-content" class="reel"></div>
-    </div>
-    <img src="{% static 'photos/photo0.png' %}" height="100">
+    
     <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
         const reel1 = document.querySelector('#reel-1-content');
         const reel2 = document.querySelector('#reel-2-content');
         const reel3 = document.querySelector('#reel-3-content');
-        
-        // 20個の画像を仮定
-        for (let i = 0; i < 10; i++) {
-            reel1.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
-            reel2.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
-            reel3.innerHTML += `<img src="/static/photos/photo${i}.png" height="100">`;
+
+        const reelHeight = 100;
+        const reelLength = 10;
+
+        // 10個の画像を仮定
+        for (let i = 0; i < reelLength; i++) {
+            const imgElement = `<img src="{% static 'photos/photo' %}${i}.png" style="top: ${i * reelHeight}px;">`;
+            reel1.innerHTML += imgElement;
+            reel2.innerHTML += imgElement;
+            reel3.innerHTML += imgElement;
         }
-        
-        let interval1, interval2, interval3;
-        $(document).keypress(function(e) {
-            if (e.which == 32) { // スペースキー
-                interval1 = setInterval(() => { reel1.scrollTop += 100; }, 100);
-                interval2 = setInterval(() => { reel2.scrollTop += 100; }, 100);
-                interval3 = setInterval(() => { reel3.scrollTop += 100; }, 100);
+
+        $(window).keydown(function(e) {
+            if (e.which == 13) { // エンターキー
+                $('.reel').css('animation', 'none');  // reset animation
+                setTimeout(() => {  // setTimeout needed to ensure the animation reset is acknowledged
+                    $('.reel').css('animation', '');
+                    $('.reel').css('animation-play-state', 'running');
+                }, 0);
             }
             if (e.which == 49) { // 1
-                clearInterval(interval1);
+                $('#reel-1-content').css('animation-play-state', 'paused');
             }
             if (e.which == 50) { // 2
-                clearInterval(interval2);
+                $('#reel-2-content').css('animation-play-state', 'paused');
             }
             if (e.which == 51) { // 3
-                clearInterval(interval3);
+                $('#reel-3-content').css('animation-play-state', 'paused');
             }
         });
+    });
     </script>
 </body>
 </html>
