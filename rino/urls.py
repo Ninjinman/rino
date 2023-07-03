@@ -20,5 +20,6 @@ from rino import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('slot-game/', views.slot_game, name='slot-game')
+    path('slot-game/', views.slot_game, name='slot-game'),
+    path('game/', views.game, name='game')
 ]
